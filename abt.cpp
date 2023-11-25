@@ -92,19 +92,19 @@ void A_input(struct pkt packet)
             tolayer3 (0, msg_buffer.front());
             starttimer (0, RTT);
             *is_wait_for_ack = true;            
-        }		
-	}  	
-	else
-	{
-		printf("A_input: msg corrupted! Send msg again: %s , a_seq: %d\n",
-            msg_buffer.begin()->payload, *a_alt_seq);
-		msg_buffer.begin()->seqnum = *a_alt_seq;
-		msg_buffer.begin()->checksum = get_checksum(&msg_buffer.front());
-        tolayer3 (0, msg_buffer.front());
-		stoptimer(0);
-        starttimer (0, RTT);
-		*is_wait_for_ack = true;		
-	}	
+        }
+    }
+    else
+    {
+        printf("A_input: msg corrupted! Send msg again: %s , a_seq: %d\n",
+	    msg_buffer.begin()->payload, *a_alt_seq);
+	msg_buffer.begin()->seqnum = *a_alt_seq;
+	msg_buffer.begin()->checksum = get_checksum(&msg_buffer.front());
+	tolayer3 (0, msg_buffer.front());
+	stoptimer(0);
+	starttimer (0, RTT);
+	*is_wait_for_ack = true;		
+    }	
 }
 
 /* called when A's timer goes off */
@@ -133,7 +133,7 @@ void A_init()
 /* called from layer 3, when a packet arrives for layer 4 at B*/
 void B_input(struct pkt packet)
 {
-	printf("B_input: Packet checksun[%d], seqnum [%d], b_state[%d] \n ",
+    printf("B_input: Packet checksun[%d], seqnum [%d], b_state[%d] \n ",
         packet.checksum, packet.seqnum, *b_alt_seq);
     if(get_checksum(&packet) == packet.checksum &&
         packet.seqnum == *b_alt_seq)
@@ -156,3 +156,5 @@ void B_input(struct pkt packet)
 void B_init()
 {
 }
+
+
